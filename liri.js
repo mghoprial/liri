@@ -38,9 +38,9 @@ switch (command) { // swith switches between the cases based on the command case
 }
 
 function getConcertInfo(byArtistName) {
-    var URL = "https://rest.bandsintown.com/artists/" + byArtistName + "/events?app_id=codingbootcamp"
+    var bandsURL = "https://rest.bandsintown.com/artists/" + byArtistName + "/events?app_id=codingbootcamp"
 
-    axios.get(URL)
+    axios.get(bandsURL)
         .then(function (response) {
             // handle success
             console.log(response.data);
@@ -62,4 +62,30 @@ function getSpotify(songName) {
         .catch(function (err) {
             console.log(err);
         });
+}
+
+function getMovie(movieName)
+{
+
+    var movieURL = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=b3c0b435"
+    
+    axios.get(movieURL)
+    .then(function (response) {
+        // handle success
+        console.log("title: " + response.data.Title);
+        console.log("year: " + response.data.Year);
+        console.log("ratings: " + response.data.Ratings);
+        //ratings only show [object]
+        console.log("country: " + response.data.Country);
+        console.log("language: " + response.data.Language);
+        console.log("Actors: " + response.data.Actors);
+        console.log("Plot: " + response.data.Plot);
+        //want to clean up above code.
+    })
+    .catch(function (error) {
+      
+        console.log(error);
+        //need to output Mr. Nobody if user doesn't type in movie name
+    })
+   
 }
