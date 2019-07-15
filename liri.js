@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 
-
+var fs = require('fs');
 
 require("dotenv").config();
 
@@ -17,8 +17,9 @@ var input = process.argv[3];
 
 
 
-
-switch (command) { // swith switches between the cases based on the command cases
+function getData() {
+     switch (command) { 
+    // swith switches between the cases based on the command cases
 
     case "concert-this": //concert this is a command, if "concert this " isn't entered
         getConcertInfo(input);
@@ -33,9 +34,12 @@ switch (command) { // swith switches between the cases based on the command case
         break;
 
     case "do-what-it-says": //if command is "do what it says, reads from read file"
-        doWhat(input);
+        doWhat();
         break;
 }
+
+}
+
 
 function getConcertInfo(byArtistName) {
     var bandsURL = "https://rest.bandsintown.com/artists/" + byArtistName + "/events?app_id=codingbootcamp"
@@ -57,22 +61,20 @@ function getSpotify(songName) {
     spotify
         .search({ type: 'track', query: songName })
         .then(function (response) {
-            // console.log("\n----------\n");
-            // console.log(JSON.stringify (response.tracks,null,2));
-            //console.log(response.tracks);
-            // console.log("\n----------\n");
-            // console.log('\n*******\n', response.tracks.items[0], '\n*******\n');
+
             for (var i = 0; i < response.tracks.items.length; i++) {
 
                 // Artist Name
-                console.log("artist name " + response.tracks.items[i].artists[0].name);
+                console.log("artist name: " + response.tracks.items[i].artists[0].name);
                 // Song Name
-                console.log("song title :" + response.tracks.items[i].name);
+                console.log("song title: " + response.tracks.items[i].name);
 
                 // Preview link
-                console.log("preview " + response.tracks.items[i].artists[0].external_urls.spotify);
+                console.log("preview: " + response.tracks.items[i].artists[0].external_urls.spotify);
                 // Album Name
-                console.log("album name :" + response.tracks.items[i].album.name);
+                console.log("album name: " + response.tracks.items[i].album.name);
+                //console log below for breaks in between results
+                console.log(' ');
             }
 
 
@@ -97,7 +99,8 @@ function getMovie(movieName) {
             console.log("language: " + response.data.Language);
             console.log("Actors: " + response.data.Actors);
             console.log("Plot: " + response.data.Plot);
-            //want to clean up above code.
+            console.log(' ');
+
         })
         .catch(function (error) {
 
@@ -106,3 +109,19 @@ function getMovie(movieName) {
         })
 
 }
+
+function doWhat() {
+    fs.readFile('random.txt', 'utf8', function (err, data) {//file stystem reads random.txt file and adds if/ then statement for errors.
+        if (err) throw err;
+        data = data.split(","); //splits a string at the comma into an array
+        command = data[0] //setting first part of string into the var command
+        input = data[1]; //setting second part of string into var data
+        console.log(data); // prints data
+        getData(); //invokes getData function which is defined above
+    });
+
+}
+getData();
+
+
+
